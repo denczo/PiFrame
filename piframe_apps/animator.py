@@ -2,8 +2,10 @@ import os
 import sys
 import time
 from subprocess import call
+
 from PIL import Image
 from neopixel import *
+
 sys.path.append("/home/pi/pywork")
 from piframe_systemfiles import basicTools
 
@@ -71,7 +73,7 @@ def changePos(right, left, ok):
         call(['python', '/home/pi/pywork/piframe_systemfiles/menu.py'])
         sys.exit
 
-    counter = basicTools.checkPos(counter,size)
+    counter = basicTools.checkPos(counter, size)
 
 def slideButtons():
 

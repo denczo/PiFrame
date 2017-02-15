@@ -1,7 +1,9 @@
 import sys
 import time
 from subprocess import call
+
 from neopixel import *
+
 sys.path.append("/home/pi/pywork/")
 from piframe_systemfiles import basicTools
 
@@ -118,7 +120,7 @@ def checkPos():
 
 def slideButtons():
 
-    changePos(basicTools.getRightButton(),basicTools.getLeftButton(),basicTools.getOkButton())
+    changePos(basicTools.getRightButton(), basicTools.getLeftButton(), basicTools.getOkButton())
 
 def hours():
 

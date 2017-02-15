@@ -3,7 +3,9 @@ import random
 import sys
 import time
 from subprocess import call
+
 from neopixel import *
+
 sys.path.append("/home/pi/pywork/")
 from piframe_systemfiles import basicTools
 
@@ -32,7 +34,7 @@ snakeHeadY = 0
 snakeLength = 3
 #X and Y
 directionCounter = 0
-snake = [65] * basicTools.LED_COUNT*2
+snake = [65] * basicTools.LED_COUNT * 2
 #counting from 0
 matrixLength = int(math.sqrt(basicTools.LED_COUNT)) - 1
 matrix = [Color(0,0,0)] * basicTools.LED_COUNT
@@ -132,26 +134,26 @@ def snakeTail(x,y):
     for i in range(snakeLength):
         if i>0:
             x = snake[i]
-            y = snake[i+basicTools.LED_COUNT]
+            y = snake[i + basicTools.LED_COUNT]
             snake[i] = lastX
-            snake[i+basicTools.LED_COUNT] = lastY
+            snake[i + basicTools.LED_COUNT] = lastY
             lastX = x
             lastY = y
         else:
             lastX = snake[i]
-            lastY = snake[i+basicTools.LED_COUNT]
+            lastY = snake[i + basicTools.LED_COUNT]
             snake[i] = x
-            snake[i+basicTools.LED_COUNT] = y
+            snake[i + basicTools.LED_COUNT] = y
 
 def viewTail(TailColor):
 
     for i in range(snakeLength):
 
         if snake[i] < 65:
-            matrix[snake[i] + (snake[i+basicTools.LED_COUNT] * 8)] = TailColor
+            matrix[snake[i] + (snake[i + basicTools.LED_COUNT] * 8)] = TailColor
 
             if i >= snakeLength-1:
-                matrix[snake[i] + (snake[i+basicTools.LED_COUNT] * 8)] = Color(0, 0, 0)
+                matrix[snake[i] + (snake[i + basicTools.LED_COUNT] * 8)] = Color(0, 0, 0)
 
 def spawnFood():
     global snakeLength
@@ -182,7 +184,7 @@ def death():
 
     global alive
     for i in range(snakeLength):
-        if snakeHeadX == snake[i] and snakeHeadY == snake[i+basicTools.LED_COUNT]:
+        if snakeHeadX == snake[i] and snakeHeadY == snake[i+ basicTools.LED_COUNT]:
             alive = False
 
 def endSequence():
