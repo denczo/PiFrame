@@ -1,3 +1,4 @@
+import glob
 import os
 import sys
 import time
@@ -9,56 +10,69 @@ from neopixel import *
 sys.path.append("/home/pi/pywork")
 from piframe_systemfiles import basicTools
 
-fps = 2
+FPS = 24
+WAIT_TIME = int(1000/FPS)
+DEBOUNCE_TIME = 200
+height = 8
 counter = 0
-files = basicTools.listFiles('/home/pi/pywork/piframe_apps/animations/*bmp')
+oldCounter = -1
+files = glob.glob('/home/pi/pywork/piframe_apps/animations/*bmp')
 size = len(files)
+startTime = time.time()
+starTimeDebounce = startTime
+pixePerFrame = basicTools.LED_COUNT
 
-def getPixelData():
+width = 0
+frames = 0
+rgb_im = None
 
-    file = os.path.join('/home/pi/pywork/piframe_apps/animations', files[counter])
 
-    im = Image.open(file)
-    im = im.rotate(180)
-    im.save
-    rgb_im = im.convert('RGB')
+def createAnimation():
 
-    startTime = time.time()
-    waitTime = 0.2
+    global oldCounter,counter
+    global startTime
+    global width
+    global frames
+    global rgb_im
 
-    # only quadratic pictures! height = width of a single picture
-    width,height = im.size
+    if oldCounter != counter:
 
-    frames = width/height
-    pixelPerFrame = height*height
-    picX = 0
-    picY = 0
+        file = files[counter]
+        im = Image.open(file)
+        #im = im.rotate(180)
+
+        rgb_im = im.convert('RGB')
+        width = im.size[0]
+        frames = width/height
+        oldCounter = counter
 
     frame = 0
-    while frame < frames:
-        slideButtons()
-        pixel = 0
+    while frame < frames and oldCounter == counter:
 
-        remainingTime = startTime+waitTime-time.time()
+        debounceTime = (starTimeDebounce * 1000) + DEBOUNCE_TIME - (time.time() * 1000)
+
+        if debounceTime <= 0:
+            slideButtons()
+            starTimeDebounce = time.time()
+
+        remainingTime = (startTime*1000) + WAIT_TIME - (time.time()*1000)
 
         if remainingTime <= 0:
-
+            pixel = 0
             startTime = time.time()
-            while pixel < pixelPerFrame:
 
-                value = pixel/height
+            while pixel < pixePerFrame:
+                value = pixel / height
                 picY = int(round(value))
-                shift = 0
-                picX = pixel - (value*height) + (frame*height)
+                picX = pixel - (picY * height) + (frame * height)
+                r, g, b = rgb_im.getpixel((picX, picY))
+                strip.setPixelColor(abs(pixel-63), Color(g, r, b))
 
-                r,g,b = rgb_im.getpixel((picX,picY))
-
-                strip.setPixelColor(pixel, Color(g,r,b))
                 pixel += 1
 
-            #time.sleep(0.1)
-            strip.show()
             frame += 1
+            strip.show()
+
 
 def changePos(right, left, ok):
 
@@ -75,11 +89,14 @@ def changePos(right, left, ok):
 
     counter = basicTools.checkPos(counter, size)
 
+#TODO fix Bug, while switching between animations
+
 def slideButtons():
 
     left = basicTools.getLeftButton()
     right = basicTools.getRightButton()
     ok = basicTools.getOkButton()
+
     changePos(right,left,ok)
 
 
@@ -87,7 +104,7 @@ if __name__ == '__main__':
 
     strip = basicTools.strip
     strip.begin()
+    startTime = time.time()
 
     while True:
-        getPixelData()
-
+        createAnimation()

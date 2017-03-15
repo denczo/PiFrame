@@ -103,6 +103,8 @@ def listFiles(directory):
 
     return files
 
+
+
 def checkPos(counter, size):
 
     if counter >= size:
@@ -131,6 +133,7 @@ def getLeftButton():
     else:
         return 0
 
+
 def getRightButton():
     global prevRightButton
     currentButton = not(GPIO.input(25))
@@ -155,7 +158,9 @@ def getOkButton():
         prevOkButton = 0
         return prevOkButton
     else:
+        prevOkButton = 0
         return 0
+
 
 #======= ANIMATION ========
 
@@ -182,30 +187,5 @@ def fadeIn():
 
 
 #======= DRAW GRAPHICS ======
-"""
-def drawGraphics(picArray,width):
-
-    drawGraphics(picArray,width,63)
-
-
-def drawGraphics(picArray,width,pos):
-
-    shift = 8 - width
-    color = 0
-
-    for i in range(picArray):
-
-        if picArray[i]:
-            color = Color(123,50,50)
-        else:
-            color = Color(0,0,0)
-
-        if picArray % width == 0:
-            pos -= 1
-        else:
-            pos -= shift
-
-        strip.setPixelColor(pos, color)
-"""
 
 

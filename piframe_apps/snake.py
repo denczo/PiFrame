@@ -184,7 +184,9 @@ def death():
 
     global alive
     for i in range(snakeLength):
-        if snakeHeadX == snake[i] and snakeHeadY == snake[i+ basicTools.LED_COUNT]:
+        if i == 0:
+            i+=1
+        if snakeHeadX == snake[i-1] and snakeHeadY == snake[i-1+ basicTools.LED_COUNT]:
             alive = False
 
 def endSequence():
