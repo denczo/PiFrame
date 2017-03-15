@@ -12,7 +12,7 @@ from piframe_systemfiles import basicTools
 
 FPS = 24
 WAIT_TIME = int(1000/FPS)
-DEBOUNCE_TIME = 200
+DEBOUNCE_TIME = 150
 height = 8
 counter = 0
 oldCounter = -1
@@ -30,7 +30,7 @@ rgb_im = None
 def createAnimation():
 
     global oldCounter,counter
-    global startTime
+    global startTime,starTimeDebounce
     global width
     global frames
     global rgb_im
